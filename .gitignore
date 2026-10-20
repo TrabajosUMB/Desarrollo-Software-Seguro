@@ -1,0 +1,6 @@
+# Archivos temporales de Word (se crean al abrir un .docx; nunca se suben)
+~$*
+
+# Dependencias y registros
+node_modules/
+*.log
