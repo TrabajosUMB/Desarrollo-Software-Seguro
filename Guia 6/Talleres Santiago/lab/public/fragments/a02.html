@@ -1,0 +1,107 @@
+<header class="stage-head">
+  <p class="eyebrow">A02:2025 · Security Misconfiguration</p>
+  <h2 class="stage-title">Un panel que nadie terminó de configurar</h2>
+  <p class="lead">No hay un error de programación: hay una ruta sin protección, una cuenta de fábrica y mensajes de error que cuentan demasiado.</p>
+</header>
+
+<div class="compare" data-rows="4">
+  <section class="panel" data-kind="vuln" aria-labelledby="a02-v-title">
+    <div class="panel-head">
+      <span class="status status--vuln"><svg class="icon"><use href="#i-shield-x"/></svg>Vulnerable</span>
+      <h3 id="a02-v-title">Panel abierto y cuenta de fábrica</h3>
+    </div>
+    <div>
+      <p class="note">La ruta del panel no pide sesión y el inicio de sesión conserva la cuenta <code>admin / admin</code>.</p>
+      <p class="session">Sesión requerida: ninguna</p>
+    </div>
+
+    <div class="step">
+      <span class="group-label">1. Panel de administración</span>
+      <div class="actions"><button class="btn" type="button" data-act="panel" data-v="vuln" data-attack="ataque">Abrir panel (sin sesión)</button></div>
+      <div class="out" aria-live="polite">
+        <p class="verdict" data-verdict hidden></p>
+        <div class="out-bar"><span data-label>Respuesta del panel</span><span class="chip" data-chip hidden></span></div>
+        <pre id="a02-vuln-panel" class="is-empty">Pulse «Abrir panel (sin sesión)».</pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="group-label">2. Inicio de sesión</span>
+      <div class="actions">
+        <button class="btn" type="button" data-act="login" data-v="vuln" data-user="admin" data-pass="admin" data-attack="ataque">Entrar con admin/admin</button>
+        <button class="btn btn--quiet" type="button" data-act="login" data-v="vuln" data-user="admin" data-pass="otraClave" data-attack="fuga">Entrar con clave incorrecta</button>
+      </div>
+      <div class="out" aria-live="polite">
+        <p class="verdict" data-verdict hidden></p>
+        <div class="out-bar"><span data-label>Respuesta del inicio de sesión</span><span class="chip" data-chip hidden></span></div>
+        <pre id="a02-vuln-login" class="is-empty">Pulse «Entrar con admin/admin».</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" data-kind="safe" aria-labelledby="a02-s-title">
+    <div class="panel-head">
+      <span class="status status--safe"><svg class="icon"><use href="#i-shield-check"/></svg>Segura</span>
+      <h3 id="a02-s-title">Sesión real y errores genéricos</h3>
+    </div>
+    <div>
+      <p class="note">Sin cuenta de fábrica: la clave se guarda como hash con sal y el panel solo abre con una sesión emitida por el servidor.</p>
+      <p class="session" id="a02-session" data-on="false">Sesión: ninguna</p>
+    </div>
+
+    <div class="step">
+      <span class="group-label">1. Panel de administración</span>
+      <div class="actions">
+        <button class="btn" type="button" data-act="panel" data-v="safe" data-attack="ataque">Abrir panel (sin sesión)</button>
+        <button class="btn btn--quiet" type="button" data-act="panel" data-v="safe" data-session="1" disabled>Abrir panel (con sesión)</button>
+      </div>
+      <p class="hint" id="a02-hint">«Abrir panel (con sesión)» se habilita al entrar con la credencial válida.</p>
+      <div class="out" aria-live="polite">
+        <p class="verdict" data-verdict hidden></p>
+        <div class="out-bar"><span data-label>Respuesta del panel</span><span class="chip" data-chip hidden></span></div>
+        <pre id="a02-safe-panel" class="is-empty">Pulse «Abrir panel (sin sesión)».</pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="group-label">2. Inicio de sesión</span>
+      <div class="actions">
+        <button class="btn" type="button" data-act="login" data-v="safe" data-user="admin" data-pass="admin" data-attack="ataque">Probar admin/admin</button>
+        <button class="btn btn--quiet" type="button" data-act="login" data-v="safe" data-user="operador" data-pass="unaClaveLarga123">Entrar con credencial válida</button>
+      </div>
+      <div class="out" aria-live="polite">
+        <p class="verdict" data-verdict hidden></p>
+        <div class="out-bar"><span data-label>Respuesta del inicio de sesión</span><span class="chip" data-chip hidden></span></div>
+        <pre id="a02-safe-login" class="is-empty">Pulse «Probar admin/admin».</pre>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let sesion = null;
+const conSesion = root.querySelector('[data-session="1"]');
+
+root.querySelectorAll('[data-act="panel"]').forEach((b) => b.addEventListener('click', () => {
+  const v = b.dataset.v;
+  const headers = (b.dataset.session && sesion) ? { 'x-session': sesion } : {};
+  return lab.run(b, $('a02-' + v + '-panel'), '/a02/' + v + '/admin-panel', { headers });
+}));
+
+root.querySelectorAll('[data-act="login"]').forEach((b) => b.addEventListener('click', async () => {
+  const v = b.dataset.v;
+  const res = await lab.run(b, $('a02-' + v + '-login'), '/a02/' + v + '/login', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ user: b.dataset.user, pass: b.dataset.pass }),
+  });
+  if (v === 'safe' && res.data && res.data.sesion) {
+    sesion = res.data.sesion;
+    $('a02-session').textContent = 'Sesión: activa';
+    $('a02-session').dataset.on = 'true';
+    conSesion.disabled = false;
+    $('a02-hint').hidden = true;
+  }
+}));
+</script>

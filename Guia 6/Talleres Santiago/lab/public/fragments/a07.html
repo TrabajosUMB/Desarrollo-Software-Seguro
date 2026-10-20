@@ -1,0 +1,117 @@
+<header class="stage-head">
+  <p class="eyebrow">A07:2025 · Authentication Failures</p>
+  <h2 class="stage-title">Un token firmado que nadie verifica</h2>
+  <p class="lead">El servidor emite un token con forma de JWT, pero una de sus rutas lee el contenido sin comprobar la firma. Quien edita el token puede declararse administrador.</p>
+</header>
+
+<section class="panel panel--wide" aria-labelledby="a07-p1-title">
+  <div class="panel-head"><h3 id="a07-p1-title">Preparar el ataque</h3></div>
+  <p class="note">El token tiene tres partes: encabezado, contenido y firma. Se altera el rol sin volver a firmar, de modo que la firma original ya no corresponde al contenido.</p>
+  <div class="actions">
+    <button class="btn" type="button" data-act="login">1. Obtener token de "invitado"</button>
+    <button class="btn" type="button" data-act="forge" disabled>2. Alterar rol a admin</button>
+  </div>
+  <p class="hint" id="a07-hint">El paso 2 se habilita al obtener el token.</p>
+  <p class="change" id="a07-change" hidden></p>
+  <div class="out" aria-live="polite">
+    <div class="out-bar"><span data-label>Token emitido</span><span class="chip" data-chip hidden></span></div>
+    <pre id="a07-token" class="is-empty">Pulse «1. Obtener token de "invitado"».</pre>
+  </div>
+</section>
+
+<div class="compare" data-rows="5">
+  <section class="panel" data-kind="vuln" aria-labelledby="a07-v-title">
+    <div class="panel-head">
+      <span class="status status--vuln"><svg class="icon"><use href="#i-shield-x"/></svg>Vulnerable</span>
+      <h3 id="a07-v-title">Confía en el contenido</h3>
+    </div>
+    <p class="note">Decodifica el token y lo acepta sin comprobar la firma.</p>
+    <div class="field">
+      <label for="a07-vuln-token">Token enviado a la ruta vulnerable</label>
+      <textarea id="a07-vuln-token" rows="4" spellcheck="false"></textarea>
+      <p class="decoded" id="a07-vuln-decoded">Contenido: sin token</p>
+    </div>
+    <div class="actions"><button class="btn" type="button" data-act="call" data-v="vuln">Consultar perfil (vulnerable)</button></div>
+    <div class="out" aria-live="polite">
+      <p class="verdict" data-verdict hidden></p>
+      <div class="out-bar"><span data-label>Respuesta del servidor</span><span class="chip" data-chip hidden></span></div>
+      <pre id="a07-vuln-out" class="is-empty">Obtenga el token y púlselo con «Consultar perfil».</pre>
+    </div>
+  </section>
+
+  <section class="panel" data-kind="safe" aria-labelledby="a07-s-title">
+    <div class="panel-head">
+      <span class="status status--safe"><svg class="icon"><use href="#i-shield-check"/></svg>Segura</span>
+      <h3 id="a07-s-title">Verifica la firma primero</h3>
+    </div>
+    <p class="note">Recalcula la firma y solo confía en el contenido si coincide.</p>
+    <div class="field">
+      <label for="a07-safe-token">Token enviado a la ruta segura</label>
+      <textarea id="a07-safe-token" rows="4" spellcheck="false"></textarea>
+      <p class="decoded" id="a07-safe-decoded">Contenido: sin token</p>
+    </div>
+    <div class="actions"><button class="btn" type="button" data-act="call" data-v="safe">Consultar perfil (seguro)</button></div>
+    <div class="out" aria-live="polite">
+      <p class="verdict" data-verdict hidden></p>
+      <div class="out-bar"><span data-label>Respuesta del servidor</span><span class="chip" data-chip hidden></span></div>
+      <pre id="a07-safe-out" class="is-empty">Obtenga el token y púlselo con «Consultar perfil».</pre>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const b64 = {
+  dec: (s) => atob(s.replace(/-/g, '+').replace(/_/g, '/')),
+  enc: (s) => btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''),
+};
+const consultas = [...root.querySelectorAll('[data-act="call"]')];
+const forjar = root.querySelector('[data-act="forge"]');
+
+function contenido(token) {
+  try { return JSON.stringify(JSON.parse(b64.dec(token.split('.')[1]))); } catch { return null; }
+}
+function actualizarContenido(v) {
+  const t = $('a07-' + v + '-token').value.trim();
+  const c = t ? contenido(t) : null;
+  $('a07-' + v + '-decoded').textContent = 'Contenido: ' + (c || (t ? 'no se puede leer' : 'sin token'));
+}
+function poner(token) {
+  for (const v of ['vuln', 'safe']) { $('a07-' + v + '-token').value = token; actualizarContenido(v); }
+}
+
+root.querySelector('[data-act="login"]').addEventListener('click', async (ev) => {
+  const res = await lab.run(ev.currentTarget, $('a07-token'), '/a07/login', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ username: 'invitado' }),
+  }, { raw: (r) => (r.data && r.data.token) || JSON.stringify(r.data, null, 2) });
+  if (res.data && res.data.token) {
+    poner(res.data.token);
+    forjar.disabled = false;
+    $('a07-hint').hidden = true;
+    $('a07-change').hidden = true;
+    consultas.forEach((b) => delete b.dataset.attack);     // con el token legitimo, consultar es uso normal
+  }
+});
+
+forjar.addEventListener('click', () => {
+  const t = $('a07-token').textContent.trim();
+  const [h, , s] = t.split('.');
+  const p = JSON.parse(b64.dec(t.split('.')[1]));
+  const antes = p.rol;
+  p.rol = 'admin';
+  poner(h + '.' + b64.enc(JSON.stringify(p)) + '.' + s);
+  $('a07-change').textContent = 'Contenido del token: rol ' + antes + ' → admin. La firma no cambió.';
+  $('a07-change').hidden = false;
+  consultas.forEach((b) => { b.dataset.attack = 'ataque'; });   // ahora consultar es un ataque
+});
+
+consultas.forEach((b) => b.addEventListener('click', () => {
+  const v = b.dataset.v;
+  const token = $('a07-' + v + '-token').value.trim();
+  return lab.run(b, $('a07-' + v + '-out'), '/a07/' + v + '/perfil', { headers: { authorization: 'Bearer ' + token } });
+}));
+
+['vuln', 'safe'].forEach((v) => $('a07-' + v + '-token').addEventListener('input', () => actualizarContenido(v)));
+</script>

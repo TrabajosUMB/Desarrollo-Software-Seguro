@@ -1,0 +1,76 @@
+<header class="stage-head">
+  <p class="eyebrow">A01:2025 · Broken Access Control</p>
+  <h2 class="stage-title">Una vista previa que visita cualquier dirección</h2>
+  <p class="lead">El servidor descarga la URL que escribe el usuario. Si nadie valida el destino, el formulario abre una puerta hacia servicios internos.</p>
+</header>
+
+<div class="compare" data-rows="4">
+  <section class="panel" data-kind="vuln" aria-labelledby="a01-v-title">
+    <div class="panel-head">
+      <span class="status status--vuln"><svg class="icon"><use href="#i-shield-x"/></svg>Vulnerable</span>
+      <h3 id="a01-v-title">Acepta cualquier URL</h3>
+    </div>
+    <p class="note">El servicio interno <code>http://127.0.0.1:4019/</code> no debería alcanzarse desde este formulario.</p>
+    <div class="controls">
+      <div class="field">
+        <label for="a01-url">URL a visitar</label>
+        <input id="a01-url" value="http://127.0.0.1:4019/" spellcheck="false" autocomplete="off">
+      </div>
+      <div class="actions"><button class="btn" type="button" data-act="vuln" data-attack="ataque">Pedir vista previa</button></div>
+    </div>
+    <div class="out" aria-live="polite">
+      <p class="verdict" data-verdict hidden></p>
+      <div class="out-bar"><span data-label>Respuesta del servidor</span><span class="chip" data-chip hidden></span></div>
+      <pre id="a01-vuln-out" class="is-empty">Pulse «Pedir vista previa» para ver qué devuelve el servidor.</pre>
+    </div>
+  </section>
+
+  <section class="panel" data-kind="safe" aria-labelledby="a01-s-title">
+    <div class="panel-head">
+      <span class="status status--safe"><svg class="icon"><use href="#i-shield-check"/></svg>Segura</span>
+      <h3 id="a01-s-title">Solo identificadores de una lista fija</h3>
+    </div>
+    <p class="note">Nunca abre una URL que venga del usuario. Solo entiende valores como <code>logo</code>.</p>
+    <div class="controls">
+      <div class="field">
+        <label for="a01-id">Identificador</label>
+        <input id="a01-id" value="logo" spellcheck="false" autocomplete="off">
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" data-act="safe-url" data-attack="ataque">Probar con la URL interna</button>
+        <button class="btn btn--quiet" type="button" data-act="safe">Pedir con identificador</button>
+      </div>
+    </div>
+    <div class="out" aria-live="polite">
+      <p class="verdict" data-verdict hidden></p>
+      <div class="out-bar"><span data-label>Respuesta del servidor</span><span class="chip" data-chip hidden></span></div>
+      <pre id="a01-safe-out" class="is-empty">Pulse «Probar con la URL interna» para ver cómo responde la defensa.</pre>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const INTERNA = 'http://127.0.0.1:4019/';
+
+// El servicio interno responde un JSON dentro de un texto: se desenvuelve para leerlo sin comillas escapadas.
+const legible = (res) => {
+  const d = res.data;
+  if (d && typeof d.respuestaServidor === 'string') {
+    try { d.respuestaServidor = JSON.parse(d.respuestaServidor); } catch { /* se deja como texto */ }
+  }
+  return res;
+};
+
+root.querySelector('[data-act="vuln"]').addEventListener('click', (ev) =>
+  lab.run(ev.currentTarget, $('a01-vuln-out'), '/a01/vuln/preview?url=' + encodeURIComponent($('a01-url').value), { tweak: legible }));
+
+root.querySelector('[data-act="safe"]').addEventListener('click', (ev) =>
+  lab.run(ev.currentTarget, $('a01-safe-out'), '/a01/safe/preview?id=' + encodeURIComponent($('a01-id').value),
+    { label: 'Respuesta a id=' + $('a01-id').value }));
+
+// El ataque no cambia el campo: lo que se envia se ve en el titulo de la respuesta
+root.querySelector('[data-act="safe-url"]').addEventListener('click', (ev) =>
+  lab.run(ev.currentTarget, $('a01-safe-out'), '/a01/safe/preview?id=' + encodeURIComponent(INTERNA),
+    { label: 'Respuesta a id=' + INTERNA }));
+</script>

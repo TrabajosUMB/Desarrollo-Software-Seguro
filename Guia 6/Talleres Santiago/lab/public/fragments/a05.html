@@ -1,0 +1,109 @@
+<header class="stage-head">
+  <p class="eyebrow">A05:2025 · Injection</p>
+  <h2 class="stage-title">Un comentario que el navegador toma por código</h2>
+  <p class="lead">Es XSS almacenado: el texto se guarda y luego se pinta como HTML. Sin escapar, una etiqueta con un manejador de evento se ejecuta en el navegador de quien la lee.</p>
+</header>
+
+<div class="compare" data-rows="4">
+  <section class="panel" data-kind="vuln" aria-labelledby="a05-v-title">
+    <div class="panel-head">
+      <span class="status status--vuln"><svg class="icon"><use href="#i-shield-x"/></svg>Vulnerable</span>
+      <h3 id="a05-v-title">Se muestra tal cual</h3>
+    </div>
+    <p class="note">Un comentario normal se ve igual en ambos lados. La etiqueta HTML con <code>onerror</code> es la prueba.</p>
+    <div class="controls">
+      <div class="field">
+        <label for="a05-vuln-text">Comentario</label>
+        <input id="a05-vuln-text" value="Excelente servicio, gracias." spellcheck="false" autocomplete="off">
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" data-act="attack" data-v="vuln">Publicar etiqueta HTML</button>
+        <button class="btn btn--quiet" type="button" data-act="post" data-v="vuln">Publicar comentario</button>
+        <button class="btn btn--quiet" type="button" data-act="reset" data-v="vuln">Reiniciar comentarios</button>
+      </div>
+    </div>
+    <div class="out">
+      <p class="verdict" data-verdict hidden></p>
+      <div class="out-bar"><span data-label>Libro de comentarios</span><span class="chip" data-chip>0 comentarios</span></div>
+      <div id="a05-vuln-list" class="comments" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="panel" data-kind="safe" aria-labelledby="a05-s-title">
+    <div class="panel-head">
+      <span class="status status--safe"><svg class="icon"><use href="#i-shield-check"/></svg>Segura</span>
+      <h3 id="a05-s-title">Se escapa antes de mostrar</h3>
+    </div>
+    <p class="note">El mismo comentario, pero el servidor lo escapa: el navegador lo pinta como texto, no como HTML.</p>
+    <div class="controls">
+      <div class="field">
+        <label for="a05-safe-text">Comentario</label>
+        <input id="a05-safe-text" value="Excelente servicio, gracias." spellcheck="false" autocomplete="off">
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" data-act="attack" data-v="safe">Publicar etiqueta HTML</button>
+        <button class="btn btn--quiet" type="button" data-act="post" data-v="safe">Publicar comentario</button>
+        <button class="btn btn--quiet" type="button" data-act="reset" data-v="safe">Reiniciar comentarios</button>
+      </div>
+    </div>
+    <div class="out">
+      <p class="verdict" data-verdict hidden></p>
+      <div class="out-bar"><span data-label>Libro de comentarios</span><span class="chip" data-chip>0 comentarios</span></div>
+      <div id="a05-safe-list" class="comments" aria-live="polite"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+// La etiqueta ejecuta un alert y, ademas, deja una marca visible para que el resultado se lea desde lejos.
+const ETIQUETA = `<img src=x onerror="alert(1);this.outerHTML='<b>XSS ejecutado</b>'">`;
+
+async function render(v) {
+  const r = await fetch('/a05/' + v + '/comments');
+  const { comments } = await r.json();
+  const list = $('a05-' + v + '-list');
+  // vulnerable: se inserta el HTML devuelto tal cual (ese es justo el defecto a mostrar)
+  // segura: el servidor ya devolvio el texto escapado, asi que aqui se ve como texto plano
+  list.innerHTML = comments.map((c) => '<div class="comment">' + c + '</div>').join('')
+    || '<p class="is-empty">Sin comentarios todavía.</p>';
+  list.closest('.out').querySelector('[data-chip]').textContent =
+    comments.length + (comments.length === 1 ? ' comentario' : ' comentarios');
+}
+
+async function publicar(v, texto, ataque) {
+  await fetch('/a05/' + v + '/comments', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ text: texto }),
+  });
+  await render(v);
+  const out = $('a05-' + v + '-list').closest('.out');
+  if (!ataque) return lab.verdict(out, lab.V.permitido, 'comentario normal publicado');
+  if (v === 'vuln') lab.verdict(out, lab.V.funciono, 'el navegador ejecutó el HTML');
+  else lab.verdict(out, lab.V.bloqueado, 'se muestra como texto');
+  out.scrollIntoView({ block: 'nearest' });
+}
+
+const conCarga = (b, fn) => async () => {
+  const etiqueta = b.textContent;
+  b.disabled = true; b.setAttribute('aria-busy', 'true'); b.textContent = 'Enviando...';
+  try { await fn(); } finally { b.disabled = false; b.removeAttribute('aria-busy'); b.textContent = etiqueta; }
+};
+
+root.querySelectorAll('[data-act="attack"]').forEach((b) =>
+  b.addEventListener('click', conCarga(b, () => publicar(b.dataset.v, ETIQUETA, true))));
+root.querySelectorAll('[data-act="post"]').forEach((b) =>
+  b.addEventListener('click', conCarga(b, () => publicar(b.dataset.v, $('a05-' + b.dataset.v + '-text').value, false))));
+root.querySelectorAll('[data-act="reset"]').forEach((b) => b.addEventListener('click', async () => {
+  await fetch('/a05/' + b.dataset.v + '/reset', { method: 'POST' });
+  await render(b.dataset.v);
+  b.closest('.panel').querySelector('[data-verdict]').hidden = true;
+}));
+
+// Al entrar se parte de un libro vacio: ningun ensayo anterior dispara el alert antes de tiempo.
+(async () => {
+  await Promise.all(['vuln', 'safe'].map((v) => fetch('/a05/' + v + '/reset', { method: 'POST' })));
+  await Promise.all(['vuln', 'safe'].map(render));
+})();
+</script>
