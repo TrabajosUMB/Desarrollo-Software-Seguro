@@ -1,0 +1,10 @@
+FASE 1 — Red Team Documental
+============================================================
+Estado: PENDIENTE — esperando documento del otro grupo
+
+Cuando recibas el modelo de amenazas del otro grupo:
+1. Coloca el archivo aquí (PDF o DOCX)
+2. Avísale a Claude para generar:
+   - Matriz de Casos de Abuso (mínimo 3 escenarios complejos)
+   - User Stories vs Abuse Stories (comparativa visual)
+   - Propuesta de Mitigación (controles que el grupo original omitió)
