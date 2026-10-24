@@ -1,0 +1,129 @@
+Results:
+
+
+[Gosec/ejemplo-propio/vulnerable/app.go:58] - G404 (CWE-338): Use of weak random number generator (math/rand or math/rand/v2 instead of crypto/rand) (Confidence: MEDIUM, Severity: HIGH)
+    57: func tokenSesion() string {
+  > 58: 	return fmt.Sprintf("%d", rand.Int63())
+    59: }
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:52] - G402 (CWE-295): TLS InsecureSkipVerify set to true. (Confidence: HIGH, Severity: HIGH)
+    51: 	return &http.Client{Transport: &http.Transport{
+  > 52: 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    53: 	}}
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:24] - G701 (CWE-89): SQL injection via taint analysis: (*database/sql.DB).Query (Confidence: HIGH, Severity: HIGH)
+    23: 	consulta := fmt.Sprintf("SELECT name FROM users WHERE id = %s", id)
+  > 24: 	rows, _ := db.Query(consulta)
+    25: 	defer rows.Close()
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:18] - G101 (CWE-798): Potential hardcoded credentials (Confidence: LOW, Severity: HIGH)
+    17: // Credencial escrita en el código fuente (G101).
+  > 18: const dbPassword = "x9Qm2LvT8rZkP4wYcN7bHs3JdFa6GuE1"
+    19: 
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:45] - G703 (CWE-22): Path traversal via taint analysis: os.ReadFile (Confidence: HIGH, Severity: HIGH)
+    44: 	nombre := r.URL.Query().Get("f")
+  > 45: 	datos, _ := os.ReadFile("/var/datos/" + nombre)
+    46: 	w.Write(datos)
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:38] - G702 (CWE-78): Command injection via taint analysis: os/exec.Command (Confidence: HIGH, Severity: HIGH)
+    37: 	host := r.URL.Query().Get("host")
+  > 38: 	salida, _ := exec.Command("sh", "-c", "ping -c 1 "+host).Output()
+    39: 	w.Write(salida)
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:63] - G124 (CWE-614): http.Cookie missing or has insecure Secure, HttpOnly, or SameSite attribute (Confidence: HIGH, Severity: MEDIUM)
+    62: func iniciarSesion(w http.ResponseWriter, r *http.Request) {
+  > 63: 	http.SetCookie(w, &http.Cookie{Name: "sid", Value: tokenSesion()})
+    64: }
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:46] - G705 (CWE-79): XSS via taint analysis: (net/http.ResponseWriter).Write (Confidence: HIGH, Severity: MEDIUM)
+    45: 	datos, _ := os.ReadFile("/var/datos/" + nombre)
+  > 46: 	w.Write(datos)
+    47: }
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:39] - G705 (CWE-79): XSS via taint analysis: (net/http.ResponseWriter).Write (Confidence: HIGH, Severity: MEDIUM)
+    38: 	salida, _ := exec.Command("sh", "-c", "ping -c 1 "+host).Output()
+  > 39: 	w.Write(salida)
+    40: }
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:31] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    30: func hashClave(clave string) string {
+  > 31: 	h := md5.Sum([]byte(clave))
+    32: 	return hex.EncodeToString(h[:])
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:72] - G114 (CWE-676): Use of net/http serve function that has no support for setting timeouts (Confidence: HIGH, Severity: MEDIUM)
+    71: 	http.HandleFunc("/login", iniciarSesion)
+  > 72: 	return http.ListenAndServe(":8080", nil)
+    73: }
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:38] - G204 (CWE-78): Subprocess launched with a potential tainted input or cmd arguments (Confidence: HIGH, Severity: MEDIUM)
+    37: 	host := r.URL.Query().Get("host")
+  > 38: 	salida, _ := exec.Command("sh", "-c", "ping -c 1 "+host).Output()
+    39: 	w.Write(salida)
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:23] - G201 (CWE-89): SQL string formatting (Confidence: HIGH, Severity: MEDIUM)
+    22: 	id := r.URL.Query().Get("id")
+  > 23: 	consulta := fmt.Sprintf("SELECT name FROM users WHERE id = %s", id)
+    24: 	rows, _ := db.Query(consulta)
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:45] - G304 (CWE-22): Potential file inclusion via variable (Confidence: HIGH, Severity: MEDIUM)
+    44: 	nombre := r.URL.Query().Get("f")
+  > 45: 	datos, _ := os.ReadFile("/var/datos/" + nombre)
+    46: 	w.Write(datos)
+
+Autofix: Consider using os.Root to scope file access under a fixed root (Go >=1.24). Prefer root.Open/root.Stat over os.Open/os.Stat to prevent directory traversal.
+
+[Gosec/ejemplo-propio/vulnerable/app.go:6] - G501 (CWE-327): Blocklisted import crypto/md5: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    5: import (
+  > 6: 	"crypto/md5"
+    7: 	"crypto/tls"
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:46] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    45: 	datos, _ := os.ReadFile("/var/datos/" + nombre)
+  > 46: 	w.Write(datos)
+    47: }
+
+Autofix: 
+
+[Gosec/ejemplo-propio/vulnerable/app.go:39] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    38: 	salida, _ := exec.Command("sh", "-c", "ping -c 1 "+host).Output()
+  > 39: 	w.Write(salida)
+    40: }
+
+Autofix: 
+
+Summary:
+  Gosec  : dev
+  Files  : 1
+  Lines  : 73
+  Nosec  : 0
+  Issues : 17
+

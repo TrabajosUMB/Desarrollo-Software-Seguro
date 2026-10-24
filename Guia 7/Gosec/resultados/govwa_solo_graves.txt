@@ -1,0 +1,17 @@
+Results:
+
+
+[Gosec/objetivos/govwa/vulnerability/sqli/function.go:41] - G701 (CWE-89): SQL injection via taint analysis: (*database/sql.DB).Query (Confidence: HIGH, Severity: HIGH)
+    40: 								and u.id=%s`, uid) //here is the vulnerable query
+  > 41: 	rows, err := DB.Query(getProfileSql)
+    42: 	if err != nil {
+
+Autofix: 
+
+Summary:
+  Gosec  : dev
+  Files  : 20
+  Lines  : 1569
+  Nosec  : 0
+  Issues : 1
+

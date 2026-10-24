@@ -1,0 +1,261 @@
+Results:
+
+
+[Gosec/objetivos/govwa/vulnerability/sqli/function.go:41] - G701 (CWE-89): SQL injection via taint analysis: (*database/sql.DB).Query (Confidence: HIGH, Severity: HIGH)
+    40: 								and u.id=%s`, uid) //here is the vulnerable query
+  > 41: 	rows, err := DB.Query(getProfileSql)
+    42: 	if err != nil {
+
+Autofix: 
+
+[Gosec/objetivos/govwa/util/cookie.go:48] - G124 (CWE-614): http.Cookie missing or has insecure Secure, HttpOnly, or SameSite attribute (Confidence: HIGH, Severity: MEDIUM)
+    47: 	for _,name := range cookies{
+  > 48: 		cookie := &http.Cookie{
+    49: 			Name:     name,
+
+Autofix: 
+
+[Gosec/objetivos/govwa/util/cookie.go:32] - G124 (CWE-614): http.Cookie missing or has insecure Secure, HttpOnly, or SameSite attribute (Confidence: HIGH, Severity: MEDIUM)
+    31: func SetCookie(w http.ResponseWriter, name, value string){
+  > 32: 	cookie := http.Cookie{
+    33: 		//Path : "/",
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/idor/idor.go:164] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    163: func Md5Sum(text string) string {
+  > 164: 	hasher := md5.New()
+    165: 	hasher.Write([]byte(text))
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/csa/csa.go:62] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    61: func Md5Sum(text string) string {
+  > 62: 	hasher := md5.New()
+    63: 	hasher.Write([]byte(text))
+
+Autofix: 
+
+[Gosec/objetivos/govwa/user/user.go:160] - G401 (CWE-328): Use of weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    159: func Md5Sum(text string) string {
+  > 160: 	hasher := md5.New()
+    161: 	hasher.Write([]byte(text))
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/xss/xss.go:100] - G203 (CWE-79): The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input. (Confidence: LOW, Severity: MEDIUM)
+    99: 
+  > 100: 	data["inlineJS"] = template.HTML(inlineJS) //this will render the javascript on client browser
+    101: 
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/xss/xss.go:63] - G203 (CWE-79): The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input. (Confidence: LOW, Severity: MEDIUM)
+    62: 			data["value"] = template.HTML(value)
+  > 63: 			data["term"] = template.HTML(vuln)
+    64: 			data["details"] = vulnDetails
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/xss/xss.go:62] - G203 (CWE-79): The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input. (Confidence: LOW, Severity: MEDIUM)
+    61: 			vuln := fmt.Sprintf("<b>%s</b>",term)
+  > 62: 			data["value"] = template.HTML(value)
+    63: 			data["term"] = template.HTML(vuln)
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/xss/xss.go:59] - G203 (CWE-79): The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input. (Confidence: LOW, Severity: MEDIUM)
+    58: 			data["value"] = template.HTML(value)
+  > 59: 			data["term"] = template.HTML(notFound) //vulnerable function
+    60: 		}else{
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/xss/xss.go:58] - G203 (CWE-79): The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input. (Confidence: LOW, Severity: MEDIUM)
+    57: 		}else if vulnDetails == ""{
+  > 58: 			data["value"] = template.HTML(value)
+    59: 			data["term"] = template.HTML(notFound) //vulnerable function
+
+Autofix: 
+
+[Gosec/objetivos/govwa/util/template.go:45] - G203 (CWE-79): The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input. (Confidence: LOW, Severity: MEDIUM)
+    44: func ToHTML(text string)template.HTML{
+  > 45: 	return template.HTML(text)
+    46: }
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/sqli/function.go:37-40] - G201 (CWE-89): SQL string formatting (Confidence: HIGH, Severity: MEDIUM)
+    36: 
+  > 37: 	getProfileSql := fmt.Sprintf(`SELECT p.user_id, p.full_name, p.city, p.phone_number 
+  > 38: 								FROM Profile as p,Users as u 
+  > 39: 								where p.user_id = u.id 
+  > 40: 								and u.id=%s`, uid) //here is the vulnerable query
+    41: 	rows, err := DB.Query(getProfileSql)
+
+Autofix: 
+
+[Gosec/objetivos/govwa/app.go:71-74] - G112 (CWE-400): Potential Slowloris Attack because ReadHeaderTimeout is not configured in the http.Server (Confidence: LOW, Severity: MEDIUM)
+    70: 
+  > 71: 	s := http.Server{
+  > 72: 		Addr:    fmt.Sprintf(":%s", config.Cfg.Webport),
+  > 73: 		Handler: router,
+  > 74: 	}
+    75: 
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/idor/idor.go:8] - G501 (CWE-327): Blocklisted import crypto/md5: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    7: 	"net/http"
+  > 8: 	"crypto/md5"
+    9: 	"encoding/hex"
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/csa/csa.go:7] - G501 (CWE-327): Blocklisted import crypto/md5: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    6: 	"net/http"
+  > 7: 	"crypto/md5"
+    8: 	"encoding/hex"
+
+Autofix: 
+
+[Gosec/objetivos/govwa/user/user.go:8] - G501 (CWE-327): Blocklisted import crypto/md5: weak cryptographic primitive (Confidence: HIGH, Severity: MEDIUM)
+    7: 	"strconv"
+  > 8: 	"crypto/md5"
+    9: 	"database/sql"
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/xss/xss.go:84] - G706 (CWE-117): Log injection via taint analysis: log.Println (Confidence: HIGH, Severity: LOW)
+    83: 	if err != nil{
+  > 84: 		log.Println(err.Error())
+    85: 	}
+
+Autofix: 
+
+[Gosec/objetivos/govwa/user/session/session.go:85] - G706 (CWE-117): Log injection via taint analysis: log.Println (Confidence: HIGH, Severity: LOW)
+    84: 	if err != nil {
+  > 85: 		log.Println(err.Error())
+    86: 	}
+
+Autofix: 
+
+[Gosec/objetivos/govwa/user/session/session.go:76] - G706 (CWE-117): Log injection via taint analysis: log.Println (Confidence: HIGH, Severity: LOW)
+    75: 	if err != nil {
+  > 76: 		log.Println(err.Error())
+    77: 	}
+
+Autofix: 
+
+[Gosec/objetivos/govwa/user/session/session.go:64] - G706 (CWE-117): Log injection via taint analysis: log.Println (Confidence: HIGH, Severity: LOW)
+    63: 	if err != nil {
+  > 64: 		log.Println(err.Error())
+    65: 	}
+
+Autofix: 
+
+[Gosec/objetivos/govwa/user/session/session.go:53] - G706 (CWE-117): Log injection via taint analysis: log.Println (Confidence: HIGH, Severity: LOW)
+    52: 	if err != nil {
+  > 53: 		log.Println(err.Error())
+    54: 		return ""
+
+Autofix: 
+
+[Gosec/objetivos/govwa/user/session/session.go:45] - G706 (CWE-117): Log injection via taint analysis: log.Println (Confidence: HIGH, Severity: LOW)
+    44: 		if err != nil {
+  > 45: 			log.Println(err.Error())
+    46: 		}
+
+Autofix: 
+
+[Gosec/objetivos/govwa/user/session/session.go:25] - G706 (CWE-117): Log injection via taint analysis: log.Println (Confidence: HIGH, Severity: LOW)
+    24: 	if err != nil {
+  > 25: 		log.Println(err.Error())
+    26: 	}
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/sqli/function.go:50] - G706 (CWE-117): Log injection via taint analysis: log.Printf (Confidence: HIGH, Severity: LOW)
+    49: 		if err != nil {
+  > 50: 			log.Printf("Row scan error: %s", err.Error())
+    51: 			return err
+
+Autofix: 
+
+[Gosec/objetivos/govwa/util/middleware/middleware.go:26] - G706 (CWE-117): Log injection via taint analysis: log.Printf (Confidence: HIGH, Severity: LOW)
+    25: 		h(w, r, ps)
+  > 26: 		log.Printf("Completed %s in %v", r.URL.Path, time.Since(start))
+    27: 	}
+
+Autofix: 
+
+[Gosec/objetivos/govwa/util/middleware/middleware.go:24] - G706 (CWE-117): Log injection via taint analysis: log.Printf (Confidence: HIGH, Severity: LOW)
+    23: 		log.Printf("Request From %s", r.Header.Get("User-Agent"))
+  > 24: 		log.Printf("Started %s %s", r.Method, r.URL.Path)
+    25: 		h(w, r, ps)
+
+Autofix: 
+
+[Gosec/objetivos/govwa/util/middleware/middleware.go:23] - G706 (CWE-117): Log injection via taint analysis: log.Printf (Confidence: HIGH, Severity: LOW)
+    22: 		start := time.Now()
+  > 23: 		log.Printf("Request From %s", r.Header.Get("User-Agent"))
+    24: 		log.Printf("Started %s %s", r.Method, r.URL.Path)
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/idor/idor.go:124] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    123: 	p := NewProfile()
+  > 124: 	p.GetData(sid)
+    125: 
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/idor/idor.go:82] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    81: 	p := NewProfile()
+  > 82: 	p.GetData(sid)
+    83: 
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/idor/idor.go:61] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    60: 	p := NewProfile()
+  > 61: 	p.GetData(sid)
+    62: 
+
+Autofix: 
+
+[Gosec/objetivos/govwa/vulnerability/idor/idor.go:42] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    41: 	p := NewProfile()
+  > 42: 	p.GetData(sid)
+    43: 
+
+Autofix: 
+
+[Gosec/objetivos/govwa/util/template.go:41] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    40: 	template := template.Must(template.ParseGlob("templates/*"))
+  > 41: 	template.ExecuteTemplate(w, name, data)
+    42: }
+
+Autofix: 
+
+[Gosec/objetivos/govwa/util/template.go:35] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    34: 	}
+  > 35: 	w.Write(b)
+    36: }
+
+Autofix: 
+
+[Gosec/objetivos/govwa/util/middleware/middleware.go:71] - G104 (CWE-703): Errors unhandled (Confidence: HIGH, Severity: LOW)
+    70: 			w.WriteHeader(http.StatusForbidden)
+  > 71: 			w.Write([]byte("Forbidden"))
+    72: 			log.Printf("sqlmap detect ")
+
+Autofix: 
+
+Summary:
+  Gosec  : dev
+  Files  : 20
+  Lines  : 1569
+  Nosec  : 0
+  Issues : 35
+

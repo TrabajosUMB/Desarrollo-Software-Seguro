@@ -1,0 +1,10 @@
+Results:
+
+
+Summary:
+  Gosec  : dev
+  Files  : 1
+  Lines  : 126
+  Nosec  : 1
+  Issues : 0
+

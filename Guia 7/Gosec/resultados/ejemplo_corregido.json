@@ -1,0 +1,54 @@
+{
+	"Golang errors": {},
+	"Issues": [
+		{
+			"severity": "HIGH",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G702",
+			"details": "Command injection via taint analysis: os/exec.Command",
+			"file": "Gosec/ejemplo-propio/corregido/app.go",
+			"code": "53: \t// #nosec G204 G702 -- host validado contra una lista cerrada y sin pasar por una shell\n54: \tif err := exec.Command(\"ping\", \"-c\", \"1\", host).Run(); err != nil {\n55: \t\thttp.Error(w, \"el destino no respondió\", http.StatusBadGateway)\n",
+			"line": "54",
+			"column": "24",
+			"nosec": false,
+			"suppressions": [
+				{
+					"kind": "inSource",
+					"justification": "host validado contra una lista cerrada y sin pasar por una shell"
+				}
+			]
+		},
+		{
+			"severity": "MEDIUM",
+			"confidence": "HIGH",
+			"cwe": {
+				"id": "78",
+				"url": "https://cwe.mitre.org/data/definitions/78.html"
+			},
+			"rule_id": "G204",
+			"details": "Subprocess launched with variable",
+			"file": "Gosec/ejemplo-propio/corregido/app.go",
+			"code": "53: \t// #nosec G204 G702 -- host validado contra una lista cerrada y sin pasar por una shell\n54: \tif err := exec.Command(\"ping\", \"-c\", \"1\", host).Run(); err != nil {\n55: \t\thttp.Error(w, \"el destino no respondió\", http.StatusBadGateway)\n",
+			"line": "54",
+			"column": "12",
+			"nosec": false,
+			"suppressions": [
+				{
+					"kind": "inSource",
+					"justification": "host validado contra una lista cerrada y sin pasar por una shell"
+				}
+			]
+		}
+	],
+	"Stats": {
+		"files": 1,
+		"lines": 126,
+		"nosec": 1,
+		"found": 0
+	},
+	"GosecVersion": "dev"
+}

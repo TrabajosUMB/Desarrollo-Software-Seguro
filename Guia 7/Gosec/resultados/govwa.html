@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Golang Security Checker</title>
+  <link rel="shortcut icon" type="image/png" href="https://securego.io/img/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.4/css/bulma.min.css" integrity="sha512-yh2RE0wZCVZeysGiqTwDTO/dKelCbS9bP2L94UvOFtl/FKXcNAje3Y2oBg/ZMZ3LS1sicYk4dYVGtDex75fvvA==" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/styles/default.min.css" integrity="sha512-hasIneQUHlh06VNBe7f6ZcHmeRTLIaQWFd43YriJ0UND19bvYRauxthDg8E4eVNPm9bRUhr5JGeqH7FRFXQu5g==" crossorigin="anonymous"/>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/highlight.min.js" integrity="sha512-gzqHAlI1hVdzJ4wiQj/MkppDr6zgEdCoBsrXKRidcaZsSPvNQ3Fy5p7PpMt/8mltxTxMHj1Ur5NWbJdqIfpxgA==" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/languages/go.min.js" integrity="sha512-BA9llYIpkzm7tOoevj0uNMleYSysUOxNYfCq3JD3q8UBMzd7fTGeZdQfpAOf6JIH+sXeWTk1KfeAhyaDD4k4wQ==" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/8.0.7/babel.min.js" integrity="sha512-QskbPn+jkiUTpGHhs5hV9bllmbq9+rNDJqnQGwbfEmMAQw0Va52B4G4WDZa2fEai2SFM6B/UmebGxPkzBFuFXg==" crossorigin="anonymous"></script>
+  
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@19",
+      "react-dom/client": "https://esm.sh/react-dom@19/client"
+    }
+  }
+  </script>
+  <style>
+  .field-label {
+    min-width: 80px;
+  }
+  .break-word {
+    word-wrap: break-word;
+  }
+  .help {
+    white-space: pre-wrap;
+  }
+  .tag {
+    width: 80px;
+  }
+  .summary-first {
+    padding: .75rem .75rem .1rem .75rem;
+  }
+  .summary-last {
+    padding: .1rem .75rem .75rem .75rem;
+  }
+  .summary {
+    padding: .1rem .75rem ;
+  }
+  </style>
+</head>
+<body>
+  <section class="section">
+    <div class="container">
+      <div id="content"></div>
+    </div>
+  </section>
+  <script>
+    var data = {"Golang errors":{},"Issues":[{"severity":"HIGH","confidence":"HIGH","cwe":{"id":"89","url":"https://cwe.mitre.org/data/definitions/89.html"},"rule_id":"G701","details":"SQL injection via taint analysis: (*database/sql.DB).Query","file":"Gosec/objetivos/govwa/vulnerability/sqli/function.go","code":"40: \t\t\t\t\t\t\t\tand u.id=%s`, uid) //here is the vulnerable query\n41: \trows, err := DB.Query(getProfileSql)\n42: \tif err != nil {\n","line":"41","column":"23","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"HIGH","cwe":{"id":"614","url":"https://cwe.mitre.org/data/definitions/614.html"},"rule_id":"G124","details":"http.Cookie missing or has insecure Secure, HttpOnly, or SameSite attribute","file":"Gosec/objetivos/govwa/util/cookie.go","code":"47: \tfor _,name := range cookies{\n48: \t\tcookie := \u0026http.Cookie{\n49: \t\t\tName:     name,\n","line":"48","column":"25","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"HIGH","cwe":{"id":"614","url":"https://cwe.mitre.org/data/definitions/614.html"},"rule_id":"G124","details":"http.Cookie missing or has insecure Secure, HttpOnly, or SameSite attribute","file":"Gosec/objetivos/govwa/util/cookie.go","code":"31: func SetCookie(w http.ResponseWriter, name, value string){\n32: \tcookie := http.Cookie{\n33: \t\t//Path : \"/\",\n","line":"32","column":"23","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"HIGH","cwe":{"id":"328","url":"https://cwe.mitre.org/data/definitions/328.html"},"rule_id":"G401","details":"Use of weak cryptographic primitive","file":"Gosec/objetivos/govwa/vulnerability/idor/idor.go","code":"163: func Md5Sum(text string) string {\n164: \thasher := md5.New()\n165: \thasher.Write([]byte(text))\n","line":"164","column":"12","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"HIGH","cwe":{"id":"328","url":"https://cwe.mitre.org/data/definitions/328.html"},"rule_id":"G401","details":"Use of weak cryptographic primitive","file":"Gosec/objetivos/govwa/vulnerability/csa/csa.go","code":"61: func Md5Sum(text string) string {\n62: \thasher := md5.New()\n63: \thasher.Write([]byte(text))\n","line":"62","column":"12","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"HIGH","cwe":{"id":"328","url":"https://cwe.mitre.org/data/definitions/328.html"},"rule_id":"G401","details":"Use of weak cryptographic primitive","file":"Gosec/objetivos/govwa/user/user.go","code":"159: func Md5Sum(text string) string {\n160: \thasher := md5.New()\n161: \thasher.Write([]byte(text))\n","line":"160","column":"12","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"LOW","cwe":{"id":"79","url":"https://cwe.mitre.org/data/definitions/79.html"},"rule_id":"G203","details":"The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input.","file":"Gosec/objetivos/govwa/vulnerability/xss/xss.go","code":"99: \n100: \tdata[\"inlineJS\"] = template.HTML(inlineJS) //this will render the javascript on client browser\n101: \n","line":"100","column":"21","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"LOW","cwe":{"id":"79","url":"https://cwe.mitre.org/data/definitions/79.html"},"rule_id":"G203","details":"The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input.","file":"Gosec/objetivos/govwa/vulnerability/xss/xss.go","code":"62: \t\t\tdata[\"value\"] = template.HTML(value)\n63: \t\t\tdata[\"term\"] = template.HTML(vuln)\n64: \t\t\tdata[\"details\"] = vulnDetails\n","line":"63","column":"19","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"LOW","cwe":{"id":"79","url":"https://cwe.mitre.org/data/definitions/79.html"},"rule_id":"G203","details":"The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input.","file":"Gosec/objetivos/govwa/vulnerability/xss/xss.go","code":"61: \t\t\tvuln := fmt.Sprintf(\"\u003cb\u003e%s\u003c/b\u003e\",term)\n62: \t\t\tdata[\"value\"] = template.HTML(value)\n63: \t\t\tdata[\"term\"] = template.HTML(vuln)\n","line":"62","column":"20","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"LOW","cwe":{"id":"79","url":"https://cwe.mitre.org/data/definitions/79.html"},"rule_id":"G203","details":"The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input.","file":"Gosec/objetivos/govwa/vulnerability/xss/xss.go","code":"58: \t\t\tdata[\"value\"] = template.HTML(value)\n59: \t\t\tdata[\"term\"] = template.HTML(notFound) //vulnerable function\n60: \t\t}else{\n","line":"59","column":"19","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"LOW","cwe":{"id":"79","url":"https://cwe.mitre.org/data/definitions/79.html"},"rule_id":"G203","details":"The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input.","file":"Gosec/objetivos/govwa/vulnerability/xss/xss.go","code":"57: \t\t}else if vulnDetails == \"\"{\n58: \t\t\tdata[\"value\"] = template.HTML(value)\n59: \t\t\tdata[\"term\"] = template.HTML(notFound) //vulnerable function\n","line":"58","column":"20","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"LOW","cwe":{"id":"79","url":"https://cwe.mitre.org/data/definitions/79.html"},"rule_id":"G203","details":"The used method does not auto-escape HTML. This can potentially lead to 'Cross-site Scripting' vulnerabilities, in case the attacker controls the input.","file":"Gosec/objetivos/govwa/util/template.go","code":"44: func ToHTML(text string)template.HTML{\n45: \treturn template.HTML(text)\n46: }\n","line":"45","column":"9","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"HIGH","cwe":{"id":"89","url":"https://cwe.mitre.org/data/definitions/89.html"},"rule_id":"G201","details":"SQL string formatting","file":"Gosec/objetivos/govwa/vulnerability/sqli/function.go","code":"36: \n37: \tgetProfileSql := fmt.Sprintf(`SELECT p.user_id, p.full_name, p.city, p.phone_number \n38: \t\t\t\t\t\t\t\tFROM Profile as p,Users as u \n39: \t\t\t\t\t\t\t\twhere p.user_id = u.id \n40: \t\t\t\t\t\t\t\tand u.id=%s`, uid) //here is the vulnerable query\n41: \trows, err := DB.Query(getProfileSql)\n","line":"37-40","column":"19","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"LOW","cwe":{"id":"400","url":"https://cwe.mitre.org/data/definitions/400.html"},"rule_id":"G112","details":"Potential Slowloris Attack because ReadHeaderTimeout is not configured in the http.Server","file":"Gosec/objetivos/govwa/app.go","code":"70: \n71: \ts := http.Server{\n72: \t\tAddr:    fmt.Sprintf(\":%s\", config.Cfg.Webport),\n73: \t\tHandler: router,\n74: \t}\n75: \n","line":"71-74","column":"7","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"HIGH","cwe":{"id":"327","url":"https://cwe.mitre.org/data/definitions/327.html"},"rule_id":"G501","details":"Blocklisted import crypto/md5: weak cryptographic primitive","file":"Gosec/objetivos/govwa/vulnerability/idor/idor.go","code":"7: \t\"net/http\"\n8: \t\"crypto/md5\"\n9: \t\"encoding/hex\"\n","line":"8","column":"2","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"HIGH","cwe":{"id":"327","url":"https://cwe.mitre.org/data/definitions/327.html"},"rule_id":"G501","details":"Blocklisted import crypto/md5: weak cryptographic primitive","file":"Gosec/objetivos/govwa/vulnerability/csa/csa.go","code":"6: \t\"net/http\"\n7: \t\"crypto/md5\"\n8: \t\"encoding/hex\"\n","line":"7","column":"2","nosec":false,"suppressions":null},{"severity":"MEDIUM","confidence":"HIGH","cwe":{"id":"327","url":"https://cwe.mitre.org/data/definitions/327.html"},"rule_id":"G501","details":"Blocklisted import crypto/md5: weak cryptographic primitive","file":"Gosec/objetivos/govwa/user/user.go","code":"7: \t\"strconv\"\n8: \t\"crypto/md5\"\n9: \t\"database/sql\"\n","line":"8","column":"2","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"117","url":"https://cwe.mitre.org/data/definitions/117.html"},"rule_id":"G706","details":"Log injection via taint analysis: log.Println","file":"Gosec/objetivos/govwa/vulnerability/xss/xss.go","code":"83: \tif err != nil{\n84: \t\tlog.Println(err.Error())\n85: \t}\n","line":"84","column":"14","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"117","url":"https://cwe.mitre.org/data/definitions/117.html"},"rule_id":"G706","details":"Log injection via taint analysis: log.Println","file":"Gosec/objetivos/govwa/user/session/session.go","code":"84: \tif err != nil {\n85: \t\tlog.Println(err.Error())\n86: \t}\n","line":"85","column":"14","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"117","url":"https://cwe.mitre.org/data/definitions/117.html"},"rule_id":"G706","details":"Log injection via taint analysis: log.Println","file":"Gosec/objetivos/govwa/user/session/session.go","code":"75: \tif err != nil {\n76: \t\tlog.Println(err.Error())\n77: \t}\n","line":"76","column":"14","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"117","url":"https://cwe.mitre.org/data/definitions/117.html"},"rule_id":"G706","details":"Log injection via taint analysis: log.Println","file":"Gosec/objetivos/govwa/user/session/session.go","code":"63: \tif err != nil {\n64: \t\tlog.Println(err.Error())\n65: \t}\n","line":"64","column":"14","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"117","url":"https://cwe.mitre.org/data/definitions/117.html"},"rule_id":"G706","details":"Log injection via taint analysis: log.Println","file":"Gosec/objetivos/govwa/user/session/session.go","code":"52: \tif err != nil {\n53: \t\tlog.Println(err.Error())\n54: \t\treturn \"\"\n","line":"53","column":"14","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"117","url":"https://cwe.mitre.org/data/definitions/117.html"},"rule_id":"G706","details":"Log injection via taint analysis: log.Println","file":"Gosec/objetivos/govwa/user/session/session.go","code":"44: \t\tif err != nil {\n45: \t\t\tlog.Println(err.Error())\n46: \t\t}\n","line":"45","column":"15","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"117","url":"https://cwe.mitre.org/data/definitions/117.html"},"rule_id":"G706","details":"Log injection via taint analysis: log.Println","file":"Gosec/objetivos/govwa/user/session/session.go","code":"24: \tif err != nil {\n25: \t\tlog.Println(err.Error())\n26: \t}\n","line":"25","column":"14","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"117","url":"https://cwe.mitre.org/data/definitions/117.html"},"rule_id":"G706","details":"Log injection via taint analysis: log.Printf","file":"Gosec/objetivos/govwa/vulnerability/sqli/function.go","code":"49: \t\tif err != nil {\n50: \t\t\tlog.Printf(\"Row scan error: %s\", err.Error())\n51: \t\t\treturn err\n","line":"50","column":"14","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"117","url":"https://cwe.mitre.org/data/definitions/117.html"},"rule_id":"G706","details":"Log injection via taint analysis: log.Printf","file":"Gosec/objetivos/govwa/util/middleware/middleware.go","code":"25: \t\th(w, r, ps)\n26: \t\tlog.Printf(\"Completed %s in %v\", r.URL.Path, time.Since(start))\n27: \t}\n","line":"26","column":"13","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"117","url":"https://cwe.mitre.org/data/definitions/117.html"},"rule_id":"G706","details":"Log injection via taint analysis: log.Printf","file":"Gosec/objetivos/govwa/util/middleware/middleware.go","code":"23: \t\tlog.Printf(\"Request From %s\", r.Header.Get(\"User-Agent\"))\n24: \t\tlog.Printf(\"Started %s %s\", r.Method, r.URL.Path)\n25: \t\th(w, r, ps)\n","line":"24","column":"13","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"117","url":"https://cwe.mitre.org/data/definitions/117.html"},"rule_id":"G706","details":"Log injection via taint analysis: log.Printf","file":"Gosec/objetivos/govwa/util/middleware/middleware.go","code":"22: \t\tstart := time.Now()\n23: \t\tlog.Printf(\"Request From %s\", r.Header.Get(\"User-Agent\"))\n24: \t\tlog.Printf(\"Started %s %s\", r.Method, r.URL.Path)\n","line":"23","column":"13","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"703","url":"https://cwe.mitre.org/data/definitions/703.html"},"rule_id":"G104","details":"Errors unhandled","file":"Gosec/objetivos/govwa/vulnerability/idor/idor.go","code":"123: \tp := NewProfile()\n124: \tp.GetData(sid)\n125: \n","line":"124","column":"2","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"703","url":"https://cwe.mitre.org/data/definitions/703.html"},"rule_id":"G104","details":"Errors unhandled","file":"Gosec/objetivos/govwa/vulnerability/idor/idor.go","code":"81: \tp := NewProfile()\n82: \tp.GetData(sid)\n83: \n","line":"82","column":"2","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"703","url":"https://cwe.mitre.org/data/definitions/703.html"},"rule_id":"G104","details":"Errors unhandled","file":"Gosec/objetivos/govwa/vulnerability/idor/idor.go","code":"60: \tp := NewProfile()\n61: \tp.GetData(sid)\n62: \n","line":"61","column":"2","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"703","url":"https://cwe.mitre.org/data/definitions/703.html"},"rule_id":"G104","details":"Errors unhandled","file":"Gosec/objetivos/govwa/vulnerability/idor/idor.go","code":"41: \tp := NewProfile()\n42: \tp.GetData(sid)\n43: \n","line":"42","column":"2","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"703","url":"https://cwe.mitre.org/data/definitions/703.html"},"rule_id":"G104","details":"Errors unhandled","file":"Gosec/objetivos/govwa/util/template.go","code":"40: \ttemplate := template.Must(template.ParseGlob(\"templates/*\"))\n41: \ttemplate.ExecuteTemplate(w, name, data)\n42: }\n","line":"41","column":"2","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"703","url":"https://cwe.mitre.org/data/definitions/703.html"},"rule_id":"G104","details":"Errors unhandled","file":"Gosec/objetivos/govwa/util/template.go","code":"34: \t}\n35: \tw.Write(b)\n36: }\n","line":"35","column":"2","nosec":false,"suppressions":null},{"severity":"LOW","confidence":"HIGH","cwe":{"id":"703","url":"https://cwe.mitre.org/data/definitions/703.html"},"rule_id":"G104","details":"Errors unhandled","file":"Gosec/objetivos/govwa/util/middleware/middleware.go","code":"70: \t\t\tw.WriteHeader(http.StatusForbidden)\n71: \t\t\tw.Write([]byte(\"Forbidden\"))\n72: \t\t\tlog.Printf(\"sqlmap detect \")\n","line":"71","column":"4","nosec":false,"suppressions":null}],"Stats":{"files":20,"lines":1569,"nosec":0,"found":35},"GosecVersion":"dev"};
+  </script>
+  <script type="text/babel" data-type="module">
+    import React, { useState, useEffect, useMemo, useRef } from 'react';
+    import { createRoot } from 'react-dom/client';
+
+    const IssueTag = ({ label, level }) => {
+      let lvlClass = "tag";
+      if (level === "HIGH") {
+        lvlClass += " is-danger";
+      } else if (level === "MEDIUM") {
+        lvlClass += " is-warning";
+      } else if (level === "LOW") {
+        lvlClass += " is-info";
+      } else if (level === "WAIVED") {
+        lvlClass += " is-success";
+      }
+      lvlClass += " is-rounded";
+      return (
+        <div className="control">
+          <div className="tags has-addons">
+            <span className="tag is-dark is-rounded">{label}</span>
+            <span className={lvlClass}>{level}</span>
+          </div>
+        </div>
+      );
+    };
+
+    const Highlight = ({ code }) => {
+      const codeRef = useRef(null);
+      useEffect(() => {
+        if (codeRef.current) {
+          hljs.highlightElement(codeRef.current);
+        }
+      }, [code]);
+      return (
+        <pre className="go"><code ref={codeRef}>{code}</code></pre>
+      );
+    };
+
+    const Issue = ({ data }) => (
+      <div className="issue box">
+        <div className="columns">
+          <div className="column is-three-quarters">
+            <strong className="break-word">{data.file} (line {data.line})</strong>
+            <p>{data.rule_id} (CWE-{data.cwe.id}): {data.details}</p>
+          </div>
+          <div className="column is-one-quarter">
+            <div className="field is-grouped is-grouped-multiline">
+              {data.nosec && <IssueTag label="NoSec" level="WAIVED"/>}
+              <IssueTag label="Severity" level={data.severity}/>
+              <IssueTag label="Confidence" level={data.confidence}/>
+            </div>
+          </div>
+        </div>
+        <div className="highlight">
+          <Highlight key={data.file+data.line} code={data.code}/>
+        </div>
+      </div>
+    );
+
+    const Stats = ({ data }) => (
+      <p className="help is-pulled-right">
+        Gosec {data.GosecVersion} scanned {data.Stats.files.toLocaleString()} files
+        with {data.Stats.lines.toLocaleString()} lines of code.
+        {data.Stats.nosec ? '\n' + data.Stats.nosec.toLocaleString() + ' false positives (nosec) have been waived.' : ''}
+      </p>
+    );
+
+    const Issues = ({ data, severity, confidence, issueType }) => {
+      if (data.Stats.files === 0) {
+        return <div className="notification">No source files found. Do you even Go?</div>;
+      }
+      if (data.Issues.length === 0) {
+        return (
+          <div>
+            <div className="notification">Awesome! No issues found!</div>
+            <Stats data={data} />
+          </div>
+        );
+      }
+      
+      const filteredIssues = data.Issues
+        .filter(issue => severity.includes(issue.severity))
+        .filter(issue => confidence.includes(issue.confidence))
+        .filter(issue => {
+          if (issueType) {
+            return issue.details.toLowerCase().startsWith(issueType.toLowerCase());
+          }
+          return true;
+        })
+        .map((issue, idx) => <Issue key={idx} data={issue} />);
+
+      if (filteredIssues.length === 0) {
+        return (
+          <div>
+            <div className="notification">
+              No issues matched given filters
+              (of total {data.Issues.length} issues).
+            </div>
+            <Stats data={data} />
+          </div>
+        );
+      }
+      return (
+        <div className="issues">
+          {filteredIssues}
+          <Stats data={data} />
+        </div>
+      );
+    };
+
+    const LevelSelector = ({ selected, available, onChange }) => {
+      const handleChange = (level) => (e) => {
+        const updated = selected.filter(item => item !== level);
+        if (e.target.checked) {
+          updated.push(level);
+        }
+        onChange(updated);
+      };
+
+      const HIGH = "HIGH", MEDIUM = "MEDIUM", LOW = "LOW";
+      const highDisabled = !available.includes(HIGH);
+      const mediumDisabled = !available.includes(MEDIUM);
+      const lowDisabled = !available.includes(LOW);
+
+      return (
+        <div className="field">
+          <div className="control">
+            <label className="checkbox" disabled={highDisabled}>
+              <input type="checkbox" checked={selected.includes(HIGH)} disabled={highDisabled} onChange={handleChange(HIGH)}/> High
+            </label>
+          </div>
+          <div className="control">
+            <label className="checkbox" disabled={mediumDisabled}>
+              <input type="checkbox" checked={selected.includes(MEDIUM)} disabled={mediumDisabled} onChange={handleChange(MEDIUM)}/> Medium
+            </label>
+          </div>
+          <div className="control">
+            <label className="checkbox" disabled={lowDisabled}>
+              <input type="checkbox" checked={selected.includes(LOW)} disabled={lowDisabled} onChange={handleChange(LOW)}/> Low
+            </label>
+          </div>
+        </div>
+      );
+    };
+
+    const Navigation = ({ data, severity, confidence, issueType, allSeverities, allConfidences, allIssueTypes, onSeverity, onConfidence, onIssueType }) => {
+      const updateIssueType = (e) => {
+        if (e.target.value === "all") {
+          onIssueType(null);
+        } else {
+          onIssueType(e.target.value);
+        }
+      };
+
+      const issueTypesOptions = allIssueTypes.map(it => (
+        <option key={it} value={it}>{it}</option>
+      ));
+
+      // Abstracted variable to prevent Go html/template parsing errors
+      const currentIssueType = issueType ? issueType : "all";
+
+      return (
+        <div>
+          <nav className="panel">
+            <div className="panel-heading">Filters</div>
+            <div className="panel-block">
+              <div className="field is-horizontal">
+                <div className="field-label is-normal">
+                  <label className="label is-pulled-left">Severity</label>
+                </div>
+                <div className="field-body">
+                  <LevelSelector selected={severity} available={allSeverities} onChange={onSeverity} />
+                </div>
+              </div>
+            </div>
+            <div className="panel-block">
+              <div className="field is-horizontal">
+                <div className="field-label is-normal">
+                  <label className="label is-pulled-left">Confidence</label>
+                </div>
+                <div className="field-body">
+                  <LevelSelector selected={confidence} available={allConfidences} onChange={onConfidence} />
+                </div>
+              </div>
+            </div>
+            <div className="panel-block">
+              <div className="field is-horizontal">
+                <div className="field-label is-normal">
+                  <label className="label is-pulled-left">Issue type</label>
+                </div>
+                <div className="field-body">
+                  <div className="field">
+                    <div className="control">
+                      <div className="select is-fullwidth">
+                        <select onChange={updateIssueType} value={currentIssueType}>
+                          <option value="all">(all)</option>
+                          {issueTypesOptions}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+          <nav className="panel">
+            <div className="panel-heading">Summary</div>
+            <div className="panel-block">
+              <div className="columns is-multiline">
+                <div className="column is-half summary-first">
+                  <label className="label is-pulled-left">Gosec: </label>
+                </div>
+                <div className="column is-half summary-first">
+                  {data.GosecVersion}
+                </div>
+                <div className="column is-half summary">
+                  <label className="label is-pulled-left">Files: </label>
+                </div>
+                <div className="column is-half summary">
+                  {data.Stats.files.toLocaleString()}
+                </div>
+                <div className="column is-half summary">
+                  <label className="label is-pulled-left">Lines: </label>
+                </div>
+                <div className="column is-half summary">
+                  {data.Stats.lines.toLocaleString()}
+                </div>
+                <div className="column is-half summary">
+                  <label className="label is-pulled-left">Nosec: </label>
+                </div>
+                <div className="column is-half summary">
+                  {data.Stats.nosec.toLocaleString()}
+                </div>
+                <div className="column is-half summary-last">
+                  <label className="label is-pulled-left">Issues: </label>
+                </div>
+                <div className="column is-half summary-last">
+                  {data.Stats.found.toLocaleString()}
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      );
+    };
+
+    const IssueBrowser = ({ data }) => {
+      const allSeverities = useMemo(() => {
+        if (!data) return [];
+        return Array.from(new Set(data.Issues.map(i => i.severity))).sort();
+      }, [data]);
+
+      const allConfidences = useMemo(() => {
+        if (!data) return [];
+        return Array.from(new Set(data.Issues.map(i => i.confidence))).sort();
+      }, [data]);
+
+      const [severity, setSeverity] = useState(allSeverities);
+      const [confidence, setConfidence] = useState(allConfidences);
+      const [issueType, setIssueType] = useState(null);
+
+      const allIssueTypes = useMemo(() => {
+        if (!data) return [];
+        return Array.from(new Set(data.Issues
+          .filter(i => severity.includes(i.severity))
+          .filter(i => confidence.includes(i.confidence))
+          .map(i => i.details)
+        )).sort();
+      }, [data, severity, confidence]);
+
+      useEffect(() => {
+        if (issueType && !allIssueTypes.includes(issueType)) {
+          setIssueType(null);
+        }
+      }, [allIssueTypes, issueType]);
+
+      if (!data) return null;
+
+      return (
+        <div className="content">
+          <div className="columns">
+            <div className="column is-one-quarter">
+              <Navigation
+                data={data}
+                severity={severity}
+                confidence={confidence}
+                issueType={issueType}
+                allSeverities={allSeverities}
+                allConfidences={allConfidences}
+                allIssueTypes={allIssueTypes}
+                onSeverity={setSeverity}
+                onConfidence={setConfidence}
+                onIssueType={setIssueType}
+              />
+            </div>
+            <div className="column is-three-quarters">
+              <Issues
+                data={data}
+                severity={severity}
+                confidence={confidence}
+                issueType={issueType}
+              />
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const root = createRoot(document.getElementById("content"));
+    root.render(<IssueBrowser data={data} />);
+  </script>
+</body>
+</html>

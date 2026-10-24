@@ -1,0 +1,18 @@
+Archivo analizado: experimentos/g101/main.go
+
+     5	const claveLegible = "Sup3rS3cret!2026"                   // contraseña "humana", baja entropía
+     6	const claveAleatoria = "x9Qm2LvT8rZkP4wYcN7bHs3JdFa6GuE1" // 32 caracteres aleatorios
+     7	var password = "admin123"                                 // el clásico
+     8	var apiToken = "K7f9Zp2QmX4vB8nL1cR6tY3wH5jD0sGa"
+     9	
+    10	func main() {
+    11		fmt.Println(len(claveLegible), len(claveAleatoria), len(password), len(apiToken))
+
+=== 1) Configuracion por defecto ===
+[main.go:8] - G101 (CWE-798): Potential hardcoded credentials (Confidence: LOW, Severity: HIGH)
+  Issues : 1
+
+=== 2) Con ignore_entropy=true (config_sin_entropia.json) ===
+[main.go:8] - G101 (CWE-798): Potential hardcoded credentials (Confidence: LOW, Severity: HIGH)
+[main.go:7] - G101 (CWE-798): Potential hardcoded credentials (Confidence: LOW, Severity: HIGH)
+  Issues : 2
