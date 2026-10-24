@@ -13,6 +13,18 @@ const informe = pathToFileURL(join(raiz, 'resultados', 'govwa.html')).href;
 const salida = join(raiz, 'presentacion', 'img');
 mkdirSync(salida, { recursive: true });
 
+// Segunda captura, estrecha y al doble de resolucion, para la figura del informe en Word (texto legible en una pagina Carta).
+const salidaInforme = join(raiz, 'informe', 'img');
+mkdirSync(salidaInforme, { recursive: true });
+const c = await abrir({ ancho: 1120, alto: 720, escala: 2, puerto: 9345 });
+try {
+  await c.ir(informe);
+  await c.esperar(3000);
+  await c.captura(join(salidaInforme, 'figura1_informe_html.png'));
+} finally {
+  await c.cerrar();
+}
+
 const b = await abrir({ ancho: 1440, alto: 1000, escala: 1, puerto: 9344 });
 try {
   await b.ir(informe);
