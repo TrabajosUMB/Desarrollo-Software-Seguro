@@ -132,9 +132,14 @@ Gosec/
 ├── ejemplo-propio/     vulnerable/ y corregido/ (módulo Go propio)
 ├── experimentos/g101/  experimento sobre la regla G101
 ├── resultados/         salidas reales: txt, json, sarif y html de GoVWA; ejemplo propio; entorno
+├── informe/            Informe_Gosec_Guia7.docx y .pdf (21 páginas, estilo UMB y APA 7) y su constructor
 ├── presentacion/       Gosec_SAST_Guia7.pptx y .pdf (11 diapositivas, 10 minutos) y su constructor
 └── objetivos/          GoVWA clonado por escanear.sh (código de terceros: no se redistribuye)
 ```
+
+`informe/construir_informe.py` genera el informe a partir de los JSON reales (comprueba las cifras con `assert`) y de
+los estilos institucionales de la UMB; esas plantillas viven fuera del repositorio, así que el script documenta cómo se
+produjo el Word pero solo se ejecuta en el equipo del autor. El PDF se exporta con Word.
 
 `presentacion/construir_presentacion.py` genera la presentación a partir de los JSON reales y comprueba con
 `assert` que las cifras coinciden; las notas del orador de cada diapositiva llevan los tiempos.

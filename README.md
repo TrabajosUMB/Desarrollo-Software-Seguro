@@ -36,7 +36,7 @@ Cómo leer la pantalla: a la izquierda va la versión **vulnerable** y a la dere
 
 | Carpeta | Contenido |
 |---|---|
-| [`Guia 7`](Guia%207/Gosec) | Análisis estático (SAST) con gosec sobre GoVWA y código propio: [README](Guia%207/Gosec/README.md), scripts, resultados reales y [presentación](Guia%207/Gosec/presentacion/Gosec_SAST_Guia7.pdf). |
+| [`Guia 7`](Guia%207/Gosec) | Análisis estático (SAST) con gosec sobre GoVWA y código propio: [README](Guia%207/Gosec/README.md), scripts, resultados reales [informe](Guia%207/Gosec/informe/Informe_Gosec_Guia7.pdf) y [presentación](Guia%207/Gosec/presentacion/Gosec_SAST_Guia7.pdf). |
 | [`Guia 6`](Guia%206) | El laboratorio OWASP, su informe y la presentación de A06 Insecure Design. |
 | [`Guia 4`](Guia%204) | Casos de abuso del proyecto Gasto Transparente (ODS 16): informe en [Word](Guia%204/CasosDeAbusoGastoTransparenteODS16.docx) y [PDF](Guia%204/CasosDeAbusoGastoTransparenteODS16.pdf), [presentación](Guia%204/Presentacion%20Casos%20de%20Abuso.pdf) y los scripts que los generan. |
 | [`Guia 3`](Guia%203) | Cyber Kill Chain aplicado al sistema IRIS: [informe](Guia%203/Guia3_KillChain_SistemaIRIS.docx) y [presentación](Guia%203/Cyber_Kill_Chain.pptx). |
